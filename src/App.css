@@ -78,6 +78,7 @@ form > #search-btn{
 .want-recipe{
   width: clamp(80%, 275px, 100%);
   height: 8%;
+  margin: auto;
   background-color: beige;
   display: flex;
   flex-direction: row;
