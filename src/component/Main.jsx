@@ -18,7 +18,7 @@ export default function Main() {
     setLoading(true);
     setRecipeShown(true);
     try {
-      const res = await fetch("/api/recipe", {
+      const res = await fetch("/api/ai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
