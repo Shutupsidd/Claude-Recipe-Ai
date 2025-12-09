@@ -3,7 +3,6 @@ import Claude from './Claude';
 import Showbtn from './Showbtn';
 import List from './List';
 import Form from './Form';
-import {getRecipeFromMistral} from "./ai"
 
 export default function Main() {
 
@@ -15,16 +14,32 @@ export default function Main() {
 
   const textRef =useRef(null);
 
-  async function getResponse() {
+    async function getResponse() {
     setLoading(true);
-    setRecipeShown(true);           // don’t toggle; just show
+    setRecipeShown(true);
     try {
-      const recipeMarkdown = await getRecipeFromMistral(messages);
-      setResponse(recipeMarkdown);
+      const res = await fetch("/api/recipe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ingredients: messages }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch recipe");
+      }
+
+      const data = await res.json();
+      setResponse(data.recipe); // recipe is the markdown string
+    } catch (err) {
+      console.error(err);
+      setResponse("Sorry, something went wrong while generating your recipe.");
     } finally {
       setLoading(false);
     }
   }
+
   // one for the list
   const [messages, setMessages] = useState([]);
 
